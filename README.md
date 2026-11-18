@@ -8,7 +8,7 @@ Docs and notes about [`tiiny` device](https://tiiny.ai/).
 
 - [`tiiny` CLI](#tiiny-cli)
   * [`tiiny top`](#tiiny-top)
-- [Use inference](#use-inference)
+  * [Use inference](#use-inference)
 - [These Docs](#these-docs)
   * [Example](#example)
 - [See Also](#see-also)
@@ -29,7 +29,7 @@ View the currently loaded models and their NPU usage.
 tiiny top
 ```
 
-## Use inference
+### Use inference
 
 From the models shown by `tiiny top`, choose an Image-Text-to-Text or
 Text Generation model, then use its model ID to run inference.
