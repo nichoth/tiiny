@@ -20,8 +20,10 @@ Docs and notes about [`tiiny` device](https://tiiny.ai/).
     + [Fine without thinking](#fine-without-thinking)
     + [Better with thinking](#better-with-thinking)
   * [`Qwen/Qwen3.6-35B-A3B-turbo`](#qwenqwen36-35b-a3b-turbo)
+    + [Turbo Speed](#turbo-speed)
+    + [Non-turbo Speed](#non-turbo-speed)
 - [These Docs](#these-docs)
-  * [Example](#example)
+  * [Line Length Example](#line-length-example)
 - [Notes](#notes)
   * [Check the context window](#check-the-context-window)
 - [See Also](#see-also)
@@ -189,7 +191,11 @@ about 5 minutes to under 5 seconds.
 
 ### `Qwen/Qwen3.6-35B-A3B-turbo`
 
-Turbo speed vs non-turbo speed
+__Turbo speed vs non-turbo speed__
+
+Turbo is about 40% faster: 36 tokens per second vs 26 for the regular model.
+
+#### Turbo Speed
 
 ```sh
 curl -s http://openai.api.tiiny/v1/chat/completions \
@@ -203,16 +209,30 @@ curl -s http://openai.api.tiiny/v1/chat/completions \
 { "tokens": 122, "tok_per_sec": 36.259809627009425 }
 ```
 
+#### Non-turbo Speed
+
+```sh
+curl -s http://openai.api.tiiny/v1/chat/completions \
+  -H "Authorization: Bearer $TIINY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"Qwen/Qwen3.6-35B-A3B","chat_template_kwargs":{"enable_thinking":false},"messages":[{"role":"user","content":"Write a TypeScript function that debounces another function."}]}' \ 
+  | jq -c '{tokens: .usage.completion_tokens, tok_per_sec: .timings.predicted_per_second}'
+```
+
+```js
+{ "tokens": 117, "tok_per_sec": 26.47888535208431 }
+```
+
 ---
 
 ## These Docs
 
-See npm script `ll` for formatting markdown help.
+Use npm script `lines` for formatting markdown.
 
-### Example
+### Line Length Example
 
 ```sh
-npm run ll -s -- ./docs/models.md > ./docs/models.new.md
+npm run lines -s -- ./docs/models.md > ./docs/models.new.md
 ```
 
 This script calls `npx prettier --prose-wrap always --print-width 80`. Output
