@@ -9,7 +9,12 @@ Docs and notes about [`tiiny` device](https://tiiny.ai/).
 - [`tiiny` CLI](#tiiny-cli)
   * [`tiiny top`](#tiiny-top)
   * [Use inference](#use-inference)
+  * [Show Downloaded Models](#show-downloaded-models)
+  * [Show all models in the store](#show-all-models-in-the-store)
   * [Download a new model](#download-a-new-model)
+  * [Switch models](#switch-models)
+    + [1. Unload current model](#1-unload-current-model)
+    + [2. Load new model](#2-load-new-model)
 - [Tiiny + Pi](#tiiny--pi)
   * [Add Tiiny Models to Pi](#add-tiiny-models-to-pi)
     + [Example `models.json`](#example-modelsjson)
@@ -53,10 +58,51 @@ Text Generation model, then use its model ID to run inference.
 tiiny run -m <model_id> -p "Explain what a transformer is in two sentences."
 ```
 
+### Show Downloaded Models
+
+```sh
+tiiny ls
+```
+
+### Show all models in the store
+
+Models in the store you can download.
+
+```sh
+tiiny ls -r
+```
+
 ### Download a new model
+
+It is `tiiny download <model-id>`.
 
 ```sh
 tiiny download Qwen/Qwen3-Coder-Next
+```
+
+### Switch models
+
+#### 1. Unload current model
+
+Use `tiiny unload` with the model ID.
+
+```sh
+tiiny unload zai-org/GLM-4.7-Flash
+```
+
+Or unload all models:
+
+```sh
+tiiny unload --all
+```
+
+#### 2. Load new model
+
+The model has to be downloaded already.
+Use `tiiny ls` to see downloaded models.
+
+```sh
+tiiny load Qwen/Qwen3.6-35B-A3B
 ```
 
 ---
@@ -161,6 +207,9 @@ With "thinking" turned off:
   -H "Content-Type: application/json" \
   -d '{"model":"Qwen/Qwen3.6-35B-A3B","chat_template_kwargs":{"enable_thinking":false},"messages":[{"role":"user","content":"Write a TypeScript function that debounces another function."}]}' \
   | jq '{finish_reason: .choices[0].finish_reason, completion_tokens: .usage.completion_tokens, tokens_per_sec: .timings.predicted_per_second}'
+```
+
+```json
 {
   "finish_reason": "stop",
   "completion_tokens": 117,
