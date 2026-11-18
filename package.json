@@ -1,7 +1,7 @@
 {
   "scripts": {
     "ll": "prettier --prose-wrap always --print-width 80",
-    "toc": "markdown-toc --maxdepth 3 -i README.md"
+    "toc": "markdown-toc --maxdepth 4 -i README.md"
   },
   "devDependencies": {
     "markdown-toc": "^1.2.0",
