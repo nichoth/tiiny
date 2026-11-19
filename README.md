@@ -21,14 +21,18 @@ Docs and notes about [`tiiny` device](https://tiiny.ai/).
 - [Models](#models)
   * [`Qwen/Qwen3.5-9B-Turbo`](#qwenqwen35-9b-turbo)
   * [`Qwen/Qwen3.6-35B-A3B`](#qwenqwen36-35b-a3b)
-  * ["Thinking"](#thinking)
-    + [Fine without thinking](#fine-without-thinking)
-    + [Better with thinking](#better-with-thinking)
+    + [`Qwen/Qwen3.6-35B-A3B` With "thinking"](#qwenqwen36-35b-a3b-with-thinking)
+    + [`Qwen/Qwen3.6-35B-A3B` With "thinking" turned off](#qwenqwen36-35b-a3b-with-thinking-turned-off)
   * [`Qwen/Qwen3.6-35B-A3B-turbo`](#qwenqwen36-35b-a3b-turbo)
     + [Turbo Speed](#turbo-speed)
     + [Non-turbo Speed](#non-turbo-speed)
 - [These Docs](#these-docs)
   * [Line Length Example](#line-length-example)
+- ["Thinking"](#thinking)
+  * [Fine without thinking](#fine-without-thinking)
+  * [Better with thinking](#better-with-thinking)
+- [`redeye`](#redeye)
+  * [`redeye` example](#redeye-example)
 - [Notes](#notes)
   * [Check the context window](#check-the-context-window)
 - [See Also](#see-also)
@@ -74,10 +78,12 @@ tiiny ls -r
 
 ### Download a new model
 
-It is `tiiny download <model-id>`.
+```sh
+tiiny download <model-id>
+```
 
 ```sh
-tiiny download Qwen/Qwen3-Coder-Next
+tiiny download Qwen/Qwen3.6-35B-A3B-turbo
 ```
 
 ### Switch models
@@ -179,7 +185,7 @@ curl -s http://openai.api.tiiny/v1/chat/completions \
 
 ### `Qwen/Qwen3.6-35B-A3B`
 
-With "thinking":
+#### `Qwen/Qwen3.6-35B-A3B` With "thinking"
 
 ```sh
 curl -s http://openai.api.tiiny/v1/chat/completions \
@@ -199,7 +205,7 @@ curl -s http://openai.api.tiiny/v1/chat/completions \
 
 ---
 
-With "thinking" turned off:
+#### `Qwen/Qwen3.6-35B-A3B` With "thinking" turned off
 
 ```sh
 % curl -s http://openai.api.tiiny/v1/chat/completions \
@@ -216,27 +222,6 @@ With "thinking" turned off:
   "tokens_per_sec": 26.019022796666896
 }
 ```
-
-### "Thinking"
-
-Qwen models are built to work with or without "thinking", and with thinking off
-they behave like a normal instruct model. The answer went from
-about 5 minutes to under 5 seconds.
-
-#### Fine without thinking
-
-* Chatting and explaining things
-* Writing small, well-defined functions like the debounce
-* Refactors and simple edits
-* Summarizing, and answering questions about code you paste in
-
-#### Better with thinking
-
-* Multi-step logic and tricky bugs
-* Math
-* Planning a change that touches several files
-
----
 
 ### `Qwen/Qwen3.6-35B-A3B-turbo`
 
@@ -286,6 +271,52 @@ npm run lines -s -- ./docs/models.md > ./docs/models.new.md
 
 This script calls `npx prettier --prose-wrap always --print-width 80`. Output
 goes to `stdout`.
+
+## "Thinking"
+
+Qwen models are built to work with or without "thinking", and with thinking off
+they behave like a normal instruct model. The answer went from
+about 5 minutes to under 5 seconds.
+
+### Fine without thinking
+
+* Chatting and explaining things
+* Writing small, well-defined functions like the debounce
+* Refactors and simple edits
+* Summarizing, and answering questions about code you paste in
+
+### Better with thinking
+
+* Multi-step logic and tricky bugs
+* Math
+* Planning a change that touches several files
+
+---
+
+## [`redeye`](https://github.com/nichoth/redeye) CLI
+
+Best model: `Qwen3-Coder-Next`, followed by `Qwen3.6-35B-A3B`.
+
+* `Qwen3.6-35B-A3B` -- uses only 47% of the memory. It thinks on every turn,
+  so it's slower per step.
+* `Qwen3-Coder-Next` It skips thinking, so each turn is quicker.
+  The cost is size: it uses 94% of the device's model memory (35 GB).
+  Nothing else can be loaded beside it, and it may **leave little room for**
+  **redeye's default of 5 agents at once**.
+
+
+### `redeye` example
+
+```sh
+caffeinate -i npx redeye pi -m tiiny/Qwen/Qwen3.6-35B-A3B-turbo
+```
+
+See
+[nichoth/redeye](https://github.com/nichoth/redeye#local-model-with-pi)
+docs.
+
+
+---
 
 ## Notes
 
