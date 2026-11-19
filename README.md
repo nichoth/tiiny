@@ -167,6 +167,9 @@ Use `tiiny` with `pi` harness.
 
 ### `Qwen/Qwen3.5-9B-Turbo`
 
+> [!TIP]
+> The fastest model.
+
 ```sh
 curl -s http://openai.api.tiiny/v1/chat/completions \
   -H "Authorization: Bearer $TIINY_API_KEY" \
